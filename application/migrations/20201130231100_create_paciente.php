@@ -11,11 +11,12 @@ class Migration_Create_paciente extends CI_Migration  {
                             'type' => 'INT',
                             'constraint' => 5,
                             'unsigned' => TRUE,
-                            'auto_increment' => TRUE
+                            'auto_increment' => TRUE                            
                     ),
                     'num_cpf' => array(
                             'type' => 'VARCHAR',
                             'constraint' => '11',
+                            'unique' => TRUE,
                     ),
                     'num_cns' => array(
                             'type' => 'VARCHAR',
