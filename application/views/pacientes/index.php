@@ -49,13 +49,25 @@
         <?php if(count($pacientes) > 0 ): ?>
           <table class="table table-striped table-hover" id="table">
             <thead>
-              <tr>               
+              <tr>
+                <td>CPF</td>
+                <td>CNS</td>
+                <td>PACIENTE</td>
+                <td>NASCIMENTO</td>
+                <td>CIDADE</td>
+                <td>UF</td>
               </tr>
             </thead>
             <tbody>
               <?php foreach ($pacientes as $paciente):?>
-                <tr class="tr" data-seq_checkl="<?= $paciente['seq_checkl'] ?>" >                 
-              </tr>
+                <tr class="tr" data-seq_checkl="<?= $paciente->get_seq_pacien() ?>" >
+                  <td><?= $paciente->get_num_cpf_view()?></td>
+                  <td><?= $paciente->get_num_cns()?></td>
+                  <td><?= $paciente->get_nom_pacien()?></td>
+                  <td><?= $paciente->get_dat_nascim_view()?></td>
+                  <td><?= $paciente->get_des_cidade()?></td>
+                  <td><?= $paciente->get_des_uf()?></td>
+                </tr>
               <?php endforeach;?>
             </tbody>
           </table>

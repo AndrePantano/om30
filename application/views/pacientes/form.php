@@ -30,9 +30,9 @@
     </div>
 
     <div class="form-group">
-      <label class="col-sm-4 control-label" for="des_nome">Nome:</label>  
+      <label class="col-sm-4 control-label" for="nom_pacien">Nome:</label>  
       <div class="col-sm-8">
-        <input id="des_nome" name="des_nome" type="text" placeholder="" class="form-control input-sm des_nome" required>
+        <input id="nom_pacien" name="nom_pacien" type="text" placeholder="" class="form-control input-sm nom_pacien" required>
       </div>
     </div>
 
@@ -40,15 +40,15 @@
     <div class="form-group">
       <label class="col-sm-4 control-label" for="dat_nascim">Data Nasc.:</label>  
       <div class="col-sm-4">
-        <input id="dat_nascim" name="dat_nascim" type="text" placeholder="" class="form-control input-sm dat_nascim" required>
+        <input id="dat_nascim" name="dat_nascim" type="date" placeholder="" class="form-control input-sm dat_nascim" required>
       </div>
     </div>
 
 
     <div class="form-group">
-      <label class="col-sm-4 control-label" for="des_nome_mae">Nome da Mãe:</label>  
+      <label class="col-sm-4 control-label" for="nom_mae">Nome da Mãe:</label>  
       <div class="col-sm-8">
-        <input id="des_nome_mae" name="des_nome_mae" type="text" placeholder="" class="form-control input-sm des_nome_mae" required>
+        <input id="nom_mae" name="nom_mae" type="text" placeholder="" class="form-control input-sm nom_mae" required>
       </div>
     </div>
 
@@ -68,7 +68,7 @@
     <div class="form-group">
       <label class="col-sm-4 control-label" for="des_lograd">Logradouro:</label>  
       <div class="col-sm-8">
-        <input id="des_lograd" name="des_lograd" type="text" placeholder="" class="form-control input-sm des_lograd" required>
+        <input id="des_lograd" name="des_lograd"  type="text" placeholder="" class="form-control input-sm des_lograd" required>
       </div>
     </div>
 
@@ -82,21 +82,21 @@
     <div class="form-group">
       <label class="col-sm-4 control-label" for="des_bairro">Bairro:</label>  
       <div class="col-sm-8">
-        <input id="des_bairro" name="des_bairro" type="text" placeholder="" class="form-control input-sm des_bairro" required>
+        <input id="des_bairro" name="des_bairro"  type="text" placeholder="" class="form-control input-sm des_bairro" required>
       </div>
     </div>
 
     <div class="form-group">
       <label class="col-sm-4 control-label" for="des_cidade">Cidade:</label>  
       <div class="col-sm-8">
-        <input id="des_cidade" name="des_cidade" type="text" placeholder="" class="form-control input-sm des_cidade" required>
+        <input id="des_cidade" name="des_cidade"  type="text" placeholder="" class="form-control input-sm des_cidade" required>
       </div>
     </div>
 
     <div class="form-group">
       <label class="col-sm-4 control-label" for="des_uf">UF</label>  
       <div class="col-sm-2">
-        <input id="des_uf" name="des_uf" type="text" placeholder="" class="form-control input-sm des_uf" required>
+        <input id="des_uf" name="des_uf"  type="text" placeholder="" maxlength="2" class="form-control input-sm des_uf" required>
       </div>
     </div>
   </div>
