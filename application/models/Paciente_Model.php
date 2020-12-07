@@ -102,9 +102,14 @@ class Paciente_Model extends CI_Model{
 		!is_null($this->get_des_cidade())	? $this->db->set("des_cidade", 	 	$this->get_des_cidade()) 	: '';
 		!is_null($this->get_des_uf())		? $this->db->set("des_uf", 		 	$this->get_des_uf()) 		: '';
 
-		$this->db->where('seq_checkl', $this->get_seq_checkl());
+		$this->db->where('seq_pacien', $this->get_seq_pacien());
 		$this->db->update($this->table);
+	}
 
+	public function delete()
+	{
+		$this->db->where('seq_pacien', $this->get_seq_pacien());
+		$this->db->delete($this->table);
 	}
 
 	public function select_all()
@@ -135,5 +140,34 @@ class Paciente_Model extends CI_Model{
 		}
 
 		return $pacientes;
+	}
+
+	public function select()
+	{
+
+		$res = $this->db->where("seq_pacien", $this->get_seq_pacien())->get($this->table);
+		
+		if($res->num_rows() == 1)
+		{			
+			$registro = $res->result_array()[0];
+			
+			$paciente = new $this->Paciente_Model();
+			$paciente->set_seq_pacien($registro["seq_pacien"]);
+			$paciente->set_num_cpf($registro["num_cpf"]);
+			$paciente->set_num_cns($registro["num_cns"]);
+			$paciente->set_nom_pacien($registro["nom_pacien"]);
+			$paciente->set_dat_nascim($registro["dat_nascim"]);
+			$paciente->set_nom_mae($registro["nom_mae"]);
+			$paciente->set_num_cep($registro["num_cep"]);
+			$paciente->set_des_lograd($registro["des_lograd"]);
+			$paciente->set_des_comple($registro["des_comple"]);
+			$paciente->set_des_bairro($registro["des_bairro"]);
+			$paciente->set_des_cidade($registro["des_cidade"]);
+			$paciente->set_des_uf($registro["des_uf"]);				
+						
+			return $paciente;
+		}
+
+		return null;
 	}
 }

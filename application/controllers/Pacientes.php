@@ -21,6 +21,30 @@ class Pacientes extends CI_Controller {
 		$this->load->view($this->default_path.'index', $data);
 	}
 
+	public function ver($seq_pacien = null)
+	{
+		if(is_null($seq_pacien))
+		{
+			$this->Message_Model->page_no_exists();
+			$this->redireciona();
+		}
+
+		$this->Paciente_Model->set_seq_pacien($seq_pacien);
+		$paciente = $this->Paciente_Model->select();
+
+		if(is_null($paciente))
+		{
+			$this->Message_Model->record_not_found();
+			$this->redireciona();
+		}
+
+		$data = array(
+			"page_name" => "Paciente",
+			"paciente" => $paciente
+		);
+		$this->load->view($this->default_path.'ver', $data);
+	}
+
 	public function action()
 	{
 		$this->check_post();
@@ -45,19 +69,35 @@ class Pacientes extends CI_Controller {
 					$this->Message_Model->set_content($e->getMessage());
 					$this->Message_Model->set_class("danger");
 					$this->Message_Model->create_message();
-				}
-				
-				// fazer upload da imagem e atribuir o id paciente como nome do arquivo
+				}				
 				break;
+
 			case 'update_data':
+				$seq_pacien = $this->input->post("seq_pacien");
+				$this->default_path = "pacientes/ver/".$seq_pacien;
+				$this->validar_form();
+				$this->update_data();
+				break;
 
+			case 'update_address':
+				$seq_pacien = $this->input->post("seq_pacien");
+				$this->default_path = "pacientes/ver/".$seq_pacien;
+				$this->validar_form();
+				$this->update_address();
 				break;
-			case 'update_photo':
-				
+
+			case 'update_image':
+				$seq_pacien = $this->input->post("seq_pacien");
+				$this->default_path = "pacientes/ver/".$seq_pacien;
+				$this->validar_form();
+				$this->do_upload($seq_pacien);				
 				break;
+
 			case 'delete':
-
+				$this->validar_form();
+				$this->delete();
 				break;
+
 			default:				
 				break;
 		}
@@ -74,7 +114,6 @@ class Pacientes extends CI_Controller {
 			case 'insert':
 				
 				if (empty($_FILES['arquivo']['name'])) $this->form_validation->set_rules('arquivo', 'Arquivo', 'required');
-
 				$this->form_validation->set_rules('arquivo', 'Arquivo', 'callback_checar_arquivo[]');
 				
 				$this->form_validation->set_rules('num_cpf', 'CPF', 'required');
@@ -87,9 +126,38 @@ class Pacientes extends CI_Controller {
 				$this->form_validation->set_rules('des_comple', 'Complemento', 'required');
 				$this->form_validation->set_rules('des_bairro', 'Bairro', 'required');
 				$this->form_validation->set_rules('des_cidade', 'Cidade', 'required');
+				$this->form_validation->set_rules('des_uf', 'UF', 'required');				
+				break;
+
+			case 'update_data':
+				$this->form_validation->set_rules('seq_pacien', 'Paciente', 'required');
+				$this->form_validation->set_rules('num_cpf', 'CPF', 'required');
+				$this->form_validation->set_rules('num_cns', 'CNS', 'required');
+				$this->form_validation->set_rules('nom_pacien', 'Nome Paciente', 'required');
+				$this->form_validation->set_rules('dat_nascim', 'Data de Nascimento', 'required');
+				$this->form_validation->set_rules('nom_mae', 'Nome Mãe', 'required');
+				break;
+			
+			case 'update_address':
+				$this->form_validation->set_rules('num_cep', 'CEP', 'required');
+				$this->form_validation->set_rules('des_lograd', 'Logradouro', 'required');
+				$this->form_validation->set_rules('des_comple', 'Complemento', 'required');
+				$this->form_validation->set_rules('des_bairro', 'Bairro', 'required');
+				$this->form_validation->set_rules('des_cidade', 'Cidade', 'required');
 				$this->form_validation->set_rules('des_uf', 'UF', 'required');
-				
-				break;			
+				break;
+
+			case 'update_image':
+
+				$this->form_validation->set_rules('seq_pacien', 'Paciente', 'required');
+
+				if (empty($_FILES['arquivo']['name'])) $this->form_validation->set_rules('arquivo', 'Arquivo', 'required');
+				$this->form_validation->set_rules('arquivo', 'Arquivo', 'callback_checar_arquivo[]');
+				break;
+
+			case 'delete':
+				$this->form_validation->set_rules('seq_pacien', 'Paciente', 'required');
+				break;
 		}		
 
 		if(!$this->form_validation->run())
@@ -100,7 +168,7 @@ class Pacientes extends CI_Controller {
 	}
 
 	public function checar_arquivo()
-	{				
+	{
 		if($_FILES['arquivo']['size'] > 100000 || $_FILES['arquivo']['type'] != 'image/jpeg')
 		{
 			$this->form_validation->set_message('checar_arquivo', 'Tipo ou o Tamanho da imagem não são permitidos');
@@ -123,6 +191,38 @@ class Pacientes extends CI_Controller {
 		$this->Paciente_Model->set_des_cidade($this->input->post("des_cidade"));
 		$this->Paciente_Model->set_des_uf($this->input->post("des_uf"));		
 		return $this->Paciente_Model->insert();
+	}
+
+	private function update_data()
+	{
+		$this->Paciente_Model->set_seq_pacien($this->input->post("seq_pacien"));
+		$this->Paciente_Model->set_num_cpf($this->input->post("num_cpf"));
+		$this->Paciente_Model->set_num_cns($this->input->post("num_cns"));
+		$this->Paciente_Model->set_nom_pacien($this->input->post("nom_pacien"));
+		$this->Paciente_Model->set_dat_nascim($this->input->post("dat_nascim"));
+		$this->Paciente_Model->set_nom_mae($this->input->post("nom_mae"));
+		$this->Paciente_Model->update();
+		$this->Message_Model->update_data();		
+	}
+
+	private function update_address()
+	{
+		$this->Paciente_Model->set_seq_pacien($this->input->post("seq_pacien"));
+		$this->Paciente_Model->set_num_cep($this->input->post("num_cep"));
+		$this->Paciente_Model->set_des_lograd($this->input->post("des_lograd"));
+		$this->Paciente_Model->set_des_comple($this->input->post("des_comple"));
+		$this->Paciente_Model->set_des_bairro($this->input->post("des_bairro"));
+		$this->Paciente_Model->set_des_cidade($this->input->post("des_cidade"));
+		$this->Paciente_Model->set_des_uf($this->input->post("des_uf"));
+		$this->Paciente_Model->update();
+		$this->Message_Model->update_data();		
+	}
+
+	private function delete()
+	{
+		$this->Paciente_Model->set_seq_pacien($this->input->post("seq_pacien"));
+		$this->Paciente_Model->delete();
+		$this->Message_Model->delete_data();
 	}
 
 	public function check_post()
