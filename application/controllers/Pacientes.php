@@ -95,6 +95,7 @@ class Pacientes extends CI_Controller {
 
 			case 'delete':
 				$this->validar_form();
+				$this->remover_avatar();
 				$this->delete();
 				break;
 
@@ -223,6 +224,13 @@ class Pacientes extends CI_Controller {
 		$this->Paciente_Model->set_seq_pacien($this->input->post("seq_pacien"));
 		$this->Paciente_Model->delete();
 		$this->Message_Model->delete_data();
+	}
+
+	private function remover_avatar()
+	{
+		$caminho = "./upload/avatar_".$this->input->post("seq_pacien").".jpg";
+		if(file_exists($caminho))
+			unlink($caminho);
 	}
 
 	public function check_post()
